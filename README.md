@@ -1,42 +1,53 @@
-# 🔎 Playwright Test Automation with TypeScript
+# Playwright Automation Framework with TypeScript
 
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 
-
-A modern end-to-end (E2E) automation framework built using **[Playwright](https://playwright.dev/)** and **TypeScript**, following the **Page Object Model (POM)** architecture. This project is designed to be scalable, maintainable, and easy to integrate with CI/CD pipelines.
+This repository demonstrates a scalable, maintainable, and robust **end-to-end test automation framework** built with **Playwright** and **TypeScript**. The framework is architected using the **Page Object Model (POM)** pattern to ensure clean separation of concerns, reusability, and ease of maintenance.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Project Overview
+
+The project targets reliable UI automation for modern web applications, focusing on:
+
+- **Strongly typed tests** with TypeScript for code quality and developer productivity  
+- **Page Object Model design** for encapsulating UI interaction logic  
+- Integration with **environment configuration** for flexible multi-environment testing  
+- Utilities for **screenshot capturing**, **test reporting**, and **debugging support**  
+- Ready for **CI/CD integration** with Playwright’s powerful test runner  
+
+---
+
+## 📂 Project Structure
 
 ```bash
-project-root/
+playwright-workplace/
+├── tests/                   # E2E test cases and fixtures
+│   ├── fixtures.ts          # Shared test data and hooks
+│   └── oneg8.spec.ts        # Example test scenario
 │
-├── tests/                   # Test specifications
-│   └── login.spec.ts
+├── pages/                   # Page Object Models encapsulating UI components
+│   ├── LoginPage.ts         
+│   └── PublicSquarePage.ts  
 │
-├── pages/                   # Page Object Models
-│   └── LoginPage.ts
+├── utils/                   # Helper utilities (e.g., screenshots)
+│   └── screenshotHelper.ts  
 │
-├── utils/                   # Helper functions and utilities
-│   └── screenshotHelper.ts
-│
-├── env.ts                   # Environment variables loader
-├── playwright.config.ts     # Global Playwright test config
-├── package.json             # Project metadata and scripts
-├── tsconfig.json            # TypeScript configuration
+├── env.ts                   # Environment variable loader (dotenv integration)
+├── playwright.config.ts     # Playwright test runner configuration
+├── package.json             # NPM dependencies and scripts
+├── tsconfig.json            # TypeScript compiler settings
 └── README.md                # Project documentation
 ```
-
 ---
 
-## 🚀 Getting Started
+## 🔧 Setup and Execution
 
 ### 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-org/your-repo.git
-cd your-repo
+git clone https://github.com/mrnsv/playwright-workplace.git
+cd playwright-workplace
 ```
 
 ### 2. **Install Dependencies**
@@ -50,7 +61,7 @@ npm install
 Create a `.env` file in the root with the following content:
 
 ```env
-BASE_URL=https://your-app-url.com
+BASE_URL=<oneg8_url>
 USER_EMAIL_001=testuser@example.com
 USER_PASSWORD=your_secure_password
 ```
@@ -69,7 +80,7 @@ export const ENV = {
 };
 ```
 
-### 4. **Run Tests**
+### 4. **Run the full test suite**
 
 ```bash
 npx playwright test
@@ -78,37 +89,18 @@ npx playwright test
 ### 5. **Run a Specific Test File**
 
 ```bash
-npx playwright test tests/login.spec.ts
+npx playwright test tests/oneg8.spec.ts
 ```
 
 ---
 
-## ✅ Features
+## ✔️ Core Features
 
-* 🔹 **Playwright + TypeScript** for strong typing and modern syntax  
-* 🧱 **Page Object Model** for cleaner, reusable test logic  
-* 📸 **Screenshot utility** for debugging and documentation  
-* 📦 **Environment-based config** for flexibility across environments  
-* ⚙️ **Playwright Test Runner** with powerful CLI and reporter support  
-
----
-
-## 🔍 Example Test Scenario
-
-```ts
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { ENV } from '../env';
-import { captureScreenshot } from '../utils/screenshotHelper';
-
-test('login', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
-  await loginPage.login(ENV.USER_EMAIL_001, ENV.USER_PASSWORD);
-  await loginPage.assertLoggedIn();
-  await captureScreenshot(page, 'homepage');
-});
-```
+* 🔹 **Playwright + TypeScript**: Leverages modern ES syntax with static typing for improved reliability  
+* 🧱 **Page Object Model**: Enhances test readability and reduces duplication  
+* 📸 **Screenshot utility**: Captures screenshots on-demand for debugging and reporting  
+* 📦 **Environment-based config**: Supports seamless switching between test environments  
+* ⚙️ **Comprehensive Reporting**: Built-in Playwright HTML reports with CLI integration  
 
 ---
 
@@ -165,11 +157,11 @@ You can also configure custom reporters in `playwright.config.ts`.
 
 ## 🧹 Best Practices Followed
 
-* ✅ Clear separation of concerns (tests vs. actions)  
-* ✅ Descriptive and maintainable selectors  
-* ✅ Robust test assertions  
-* ✅ Modular utilities  
-* ✅ Typed page objects  
+* ✅ Strict adherence to Separation of Concerns between test logic and UI interactions
+* ✅ Usage of descriptive, maintainable selectors to reduce flakiness
+* ✅ Strongly typed page objects and utilities for consistency and error prevention
+* ✅ Modular and reusable helper functions for clean test code
+* ✅ Comprehensive test assertions and meaningful failure diagnostics
 
 ---
 
