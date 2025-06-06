@@ -1,12 +1,9 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { ENV } from '../env';
+import { test } from './fixtures';
 
-test('login', async ({ page }) => {
-  const loginPage = new LoginPage(page);
+test('login', async ({ loginPage, env, capture, page }) => {
   await loginPage.goto();
-  console.log(ENV.USER_EMAIL_001, ENV.USER_PASSWORD);
-  await loginPage.login(ENV.USER_EMAIL_001, ENV.USER_PASSWORD);
+  console.log(env.USER_EMAIL_001, env.USER_PASSWORD);
+  await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
   await loginPage.assertLoggedIn();
-  await loginPage.takeScreenshot();
+  await capture(page, 'homepage');
 });
