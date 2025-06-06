@@ -1,17 +1,15 @@
-
----
-
-```markdown
 # 🔎 Playwright Test Automation with TypeScript
 
-A modern end-to-end (E2E) automation framework built using **[Playwright](https://playwright.dev/)** and **TypeScript**, following **Page Object Model (POM)** architecture. This project is designed to be scalable, maintainable, and easy to integrate with CI/CD pipelines.
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
+
+
+A modern end-to-end (E2E) automation framework built using **[Playwright](https://playwright.dev/)** and **TypeScript**, following the **Page Object Model (POM)** architecture. This project is designed to be scalable, maintainable, and easy to integrate with CI/CD pipelines.
 
 ---
 
 ## 📁 Project Structure
 
-```
-
+```bash
 project-root/
 │
 ├── tests/                   # Test specifications
@@ -28,8 +26,7 @@ project-root/
 ├── package.json             # Project metadata and scripts
 ├── tsconfig.json            # TypeScript configuration
 └── README.md                # Project documentation
-
-````
+```
 
 ---
 
@@ -40,7 +37,7 @@ project-root/
 ```bash
 git clone https://github.com/your-org/your-repo.git
 cd your-repo
-````
+```
 
 ### 2. **Install Dependencies**
 
@@ -58,7 +55,19 @@ USER_EMAIL_001=testuser@example.com
 USER_PASSWORD=your_secure_password
 ```
 
-Ensure your `env.ts` reads this file using `dotenv`.
+Ensure your `env.ts` reads this file using `dotenv`:
+
+```ts
+// env.ts
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+export const ENV = {
+  BASE_URL: process.env.BASE_URL,
+  USER_EMAIL_001: process.env.USER_EMAIL_001,
+  USER_PASSWORD: process.env.USER_PASSWORD
+};
+```
 
 ### 4. **Run Tests**
 
@@ -76,17 +85,22 @@ npx playwright test tests/login.spec.ts
 
 ## ✅ Features
 
-* 🔹 **Playwright + TypeScript** for strong typing and modern syntax
-* 🧱 **Page Object Model** for cleaner, reusable test logic
-* 📸 **Screenshot utility** for debugging and documentation
-* 📦 **Environment-based config** for flexibility across environments
-* ⚙️ **Playwright Test Runner** with powerful CLI and reporter support
+* 🔹 **Playwright + TypeScript** for strong typing and modern syntax  
+* 🧱 **Page Object Model** for cleaner, reusable test logic  
+* 📸 **Screenshot utility** for debugging and documentation  
+* 📦 **Environment-based config** for flexibility across environments  
+* ⚙️ **Playwright Test Runner** with powerful CLI and reporter support  
 
 ---
 
 ## 🔍 Example Test Scenario
 
 ```ts
+import { test } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { ENV } from '../env';
+import { captureScreenshot } from '../utils/screenshotHelper';
+
 test('login', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
@@ -102,23 +116,37 @@ test('login', async ({ page }) => {
 
 All screenshots are saved under:
 
-```
+```bash
 ./screenshots/
 ```
 
-You can customize the naming and path in `screenshotHelper.ts`.
+You can customize the naming and path in `screenshotHelper.ts`:
+
+```ts
+// screenshotHelper.ts
+import { Page } from '@playwright/test';
+import fs from 'fs';
+
+export async function captureScreenshot(page: Page, name: string) {
+  const dir = './screenshots';
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  await page.screenshot({ path: `${dir}/${name}.png`, fullPage: true });
+}
+```
 
 ---
 
 ## 🧪 Test Reporting
 
-To generate an HTML report:
+To generate and view an HTML report:
 
 ```bash
 npx playwright show-report
 ```
 
-Or configure custom reporters in `playwright.config.ts`.
+You can also configure custom reporters in `playwright.config.ts`.
 
 ---
 
@@ -137,11 +165,11 @@ Or configure custom reporters in `playwright.config.ts`.
 
 ## 🧹 Best Practices Followed
 
-* ✅ Clear separation of concerns (tests vs. actions)
-* ✅ Descriptive and maintainable selectors
-* ✅ Robust test assertions
-* ✅ Modular utilities
-* ✅ Typed page objects
+* ✅ Clear separation of concerns (tests vs. actions)  
+* ✅ Descriptive and maintainable selectors  
+* ✅ Robust test assertions  
+* ✅ Modular utilities  
+* ✅ Typed page objects  
 
 ---
 
@@ -161,9 +189,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 For queries or feedback, please contact [mrnsv01@gmail.com](mailto:mrnsv01@gmail.com).
 
-```
-
 ---
-
-Let me know if you'd like this tailored further for CI integration (like GitHub Actions), Docker setup, or enterprise-style documentation.
-```
