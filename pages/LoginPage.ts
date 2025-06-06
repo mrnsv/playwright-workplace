@@ -29,8 +29,4 @@ export class LoginPage {
   async assertLoggedIn() {
     await expect(this.publicSquareLink).toBeVisible();
   }
-
-  async takeScreenshot() {
-    await this.page.screenshot({ path: './screenshots/homepage.png', fullPage: true });
-  }
 }
