@@ -1,3 +1,4 @@
+import { env } from 'process';
 import { test, expect } from './fixtures';
 
 test('login', async ({ loginPage, env, capture, page }) => {
@@ -15,4 +16,13 @@ test('public_square', async ({ loginPage, publicSquarePage, env, capture }) => {
   await publicSquarePage.assertScrollToTopVisible();
 
   await capture(publicSquarePage.page, 'public-square');
+});
+
+test('reels', async ({ loginPage, reelsPage, env, capture }) => {
+  await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+
+  await reelsPage.navigateToReels();
+  await reelsPage.assertReelsFeedVisible();
+
+  await capture(reelsPage.page, 'reels');
 });
