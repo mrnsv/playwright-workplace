@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { PublicSquarePage } from '../pages/PublicSquarePage';
 import { ReelsPage } from '../pages/ReelsPage';
 import { MessagesPage } from '../pages/MessagesPage';
+import { ProfilePage } from '../pages/ProfilePage';
 import { ENV } from '../env';
 import { captureScreenshot } from '../utils/screenshotHelper';
 
@@ -11,6 +12,7 @@ type CustomFixtures = {
   publicSquarePage: PublicSquarePage;
   reelsPage: ReelsPage;
   messagesPage: MessagesPage;
+  profilePage: ProfilePage;
   env: typeof ENV;
   capture: (page: Page, name: string) => Promise<void>;
 };
@@ -27,6 +29,9 @@ export const test = base.extend<CustomFixtures>({
   },
   messagesPage: async ({ page }, use) => {
     await use(new MessagesPage(page));
+  },
+  profilePage: async ({ page }, use) => {
+    await use(new ProfilePage(page));
   },
   env: async ({}, use) => {
     await use(ENV);

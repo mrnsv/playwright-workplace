@@ -1,4 +1,4 @@
-import { test } from './fixtures';
+import { test, expect  } from './fixtures';
 
 test('login', async ({ loginPage, env, capture, page }) => {
   await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
@@ -39,4 +39,20 @@ test('messages', async ({ loginPage, messagesPage, env, capture }) => {
   await messagesPage.assertCompanyName('ONEG8');
 
   await capture(messagesPage.page, 'messages');
+});
+
+test('profile_page', async ({ loginPage, profilePage, env, capture }) => {
+  await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+
+  await profilePage.clickProfileTab();
+
+  await expect(profilePage.editProfileButton).toBeVisible();
+  await expect(profilePage.profileBannerImage).toBeVisible();
+  const username = await profilePage.getUserNameText();
+  expect(username?.trim().length).toBeGreaterThan(0);
+
+  await profilePage.openNotifications();
+  await profilePage.clearAllNotifications();
+
+  await capture(profilePage.page, 'profile-page');
 });
