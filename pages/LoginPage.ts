@@ -36,6 +36,7 @@ export class LoginPage {
   }
 
   async assertLoggedIn() {
+    await this.page.waitForLoadState('networkidle');
     await expect(this.loggedInIndicator).toBeVisible();
   }
 }
