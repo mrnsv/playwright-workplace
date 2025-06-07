@@ -11,7 +11,7 @@ test('public_square', async ({ loginPage, publicSquarePage, env, capture }) => {
 
   await publicSquarePage.navigateToPublicSquare();
   await publicSquarePage.assertPublicFeedVisible();
-  await publicSquarePage.assertSidebarMenuVisible();
+  await publicSquarePage.assertDefaultSidebarItemsPresent();
   await publicSquarePage.assertActiveLinkIsVisible();
   await publicSquarePage.scrollDown();
   await publicSquarePage.assertScrollToTopVisible();
@@ -121,17 +121,17 @@ test.describe('Settings Page', () => {
     await expect(logoutModalText).toHaveText(/are you absolutely certain.*logging out/i);
 
     const confirmLogoutButton = page.locator('button.delete-btn', { hasText: 'Yes, Log Out' });
-    await confirmLogoutButton.click();
 
     const [response] = await Promise.all([
       page.waitForResponse(resp =>
         resp.url().includes('/log_out') && resp.status() === 200
       ),
-      settingsPage.clickPrivacySettings()
+      confirmLogoutButton.click(),
     ]);
 
     const json = await response.json();
-    expect(json).toHaveProperty('data');
+    expect(json).toHaveProperty('Message', 'Logout successful');
+    expect(json).toHaveProperty('Status', 1);
 
     await expect(page).toHaveURL(/login/i);
   });

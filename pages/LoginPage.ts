@@ -7,6 +7,8 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly signInButton: Locator;
   readonly loggedInIndicator: Locator;
+  readonly toastMessage: Locator;
+  readonly companyName : Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -14,6 +16,8 @@ export class LoginPage {
     this.passwordInput = page.locator('#password');
     this.signInButton = page.getByRole('button', { name: 'Sign in' });
     this.loggedInIndicator = page.locator("//a[text()='Public Square']");
+    this.toastMessage = page.locator('.Toastify__toast-body >> text=Login successful');
+    this.companyName = page.locator('span.company-name.pointer');
   }
 
   async goto() {
@@ -25,18 +29,21 @@ export class LoginPage {
     await this.goto();
 
     // If already logged in, skip
-    const isLoggedIn = await this.loggedInIndicator.isVisible().catch(() => false);
+    const isLoggedIn = await this.companyName.isVisible().catch(() => false);
     if (isLoggedIn) return;
 
     // Perform login
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.signInButton.click();
-    await expect(this.loggedInIndicator).toBeVisible();
+    
+    // Assert toast
+    await expect(this.toastMessage).toBeVisible();
+    await expect(this.toastMessage).toHaveText(/Login successful/);
   }
 
   async assertLoggedIn() {
-    await this.page.waitForLoadState('networkidle');
-    await expect(this.loggedInIndicator).toBeVisible();
+    await expect(this.companyName).toBeVisible();
+    await expect(this.companyName).toHaveText('ONEG8');
   }
 }

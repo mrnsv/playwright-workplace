@@ -5,18 +5,18 @@ export class PublicSquarePage {
   readonly publicSquareButton: Locator;
   readonly publicFeedContainer: Locator;
   readonly scrollToTopButton: Locator;
-  readonly sidebarMenu: Locator;
   readonly createButton: Locator;
   readonly activeNavLink: Locator;
   readonly companyName: Locator;
+  readonly sidebarLinks: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
     this.publicSquareButton = page.locator("//a[text()='Public Square']");
     this.publicFeedContainer = page.locator('.homelazyComponent_screenContainer__AMht8');
     this.scrollToTopButton = page.locator('span.scroll-to-top[data-tooltip="Scroll to Top"]');
-    // Sidebar menu icon (burger)
-    this.sidebarMenu = page.locator('.sidebar-menu');
+    this.sidebarLinks = page.locator('.position-relative a.sidedata');
 
     // Create button in sidebar
     this.createButton = page.locator('.primary-btn');
@@ -45,9 +45,6 @@ export class PublicSquarePage {
   async assertScrollToTopVisible() {
     await expect(this.scrollToTopButton).toBeVisible();
   }
-  async assertSidebarMenuVisible() {
-    await expect(this.sidebarMenu).toBeVisible();
-  }
 
   async clickCreateButton() {
     await this.createButton.click();
@@ -59,5 +56,27 @@ export class PublicSquarePage {
 
   async assertCompanyName(expectedName: string) {
     await expect(this.companyName).toHaveText(expectedName);
+  }
+
+  async assertSidebarItems(expectedItems: string[]) {
+    const actualItems = await this.sidebarLinks.allTextContents();
+    for (const item of expectedItems) {
+      expect(actualItems).toContain(item);
+    }
+  }
+  async assertDefaultSidebarItemsPresent() {
+    await this.assertSidebarItems([
+      'Create',
+      'Public Square',
+      'Reels',
+      'Messages',
+      'Search',
+      'Notification',
+      'Wallet',
+      'DataG8',
+      'KYC',
+      'Profile',
+      'Settings'
+    ]);
   }
 }
