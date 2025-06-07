@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-export class Reelspage {
+export class ReelsPage {
     readonly page: Page;
     readonly reelsButton: Locator;
     readonly reelContainer: Locator;
