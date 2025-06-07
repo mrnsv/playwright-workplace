@@ -56,3 +56,83 @@ test('profile_page', async ({ loginPage, profilePage, env, capture }) => {
 
   await capture(profilePage.page, 'profile-page');
 });
+
+test.describe('Settings Page', () => {
+  test.beforeEach(async ({ loginPage, settingsPage, env }) => {
+    await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+    await settingsPage.navigateToSettings();
+  });
+
+  test('should display Account Settings as active menu', async ({ settingsPage }) => {
+    expect(await settingsPage.isAccountSettingsVisible()).toBeTruthy();
+  });
+
+  test('should display all main account settings options', async ({ settingsPage }) => {
+    await expect(settingsPage.accountTypeOption).toBeVisible();
+    await expect(settingsPage.twoFactorAuthOption).toBeVisible();
+    await expect(settingsPage.changePasswordOption).toBeVisible();
+    await expect(settingsPage.deleteAccountOption).toBeVisible();
+  });
+
+  test('should navigate to Privacy Settings on sidebar menu click', async ({ settingsPage, page }) => {
+    await settingsPage.clickPrivacySettings();
+
+  const [response] = await Promise.all([
+    page.waitForResponse(resp =>
+      resp.url().includes('/edit_profile') && resp.status() === 200
+    ),
+    settingsPage.clickPrivacySettings()
+  ]);
+
+  const json = await response.json();
+  expect(json).toHaveProperty('data');
+
+
+    // Assert heading
+    const privacyHeading = settingsPage.page.locator('p.setting-head', { hasText: 'Privacy Settings' });
+    await expect(privacyHeading).toBeVisible();
+
+    // Assert options
+    await expect(settingsPage.page.getByText('Messages and Calls')).toBeVisible();
+    await expect(settingsPage.page.getByText('Blocked Users')).toBeVisible();
+    await expect(settingsPage.page.getByText('Download Content')).toBeVisible();
+    await expect(settingsPage.page.getByText('Comments')).toBeVisible();
+  });
+
+  test('should navigate to Corporate Account on sidebar menu click', async ({ settingsPage }) => {
+    await settingsPage.clickCorporateAccount();
+    await expect(settingsPage.page).toHaveURL(/settings.*corporate/i);
+  });
+
+  test('should navigate to General Settings on sidebar menu click', async ({ settingsPage }) => {
+    await settingsPage.clickGeneralSettings();
+    await expect(settingsPage.page).toHaveURL(/settings.*general/i);
+  });
+
+  test('should navigate to About ONG8 on sidebar menu click', async ({ settingsPage }) => {
+    await settingsPage.clickAboutOneG8();
+    await expect(settingsPage.page).toHaveURL(/settings.*about/i);
+  });
+
+  test('should log out on Log Out menu click', async ({ settingsPage, page }) => {
+    await settingsPage.clickLogOut();
+
+    const logoutModalText = page.locator('p.text-center.remove-acc');
+    await expect(logoutModalText).toHaveText(/are you absolutely certain.*logging out/i);
+
+    const confirmLogoutButton = page.locator('button.delete-btn', { hasText: 'Yes, Log Out' });
+    await confirmLogoutButton.click();
+
+    const [response] = await Promise.all([
+      page.waitForResponse(resp =>
+        resp.url().includes('/log_out') && resp.status() === 200
+      ),
+      settingsPage.clickPrivacySettings()
+    ]);
+
+    const json = await response.json();
+    expect(json).toHaveProperty('data');
+
+    await expect(page).toHaveURL(/login/i);
+  });
+});
