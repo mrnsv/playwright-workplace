@@ -1,5 +1,4 @@
-import { env } from 'process';
-import { test, expect } from './fixtures';
+import { test } from './fixtures';
 
 test('login', async ({ loginPage, env, capture, page }) => {
   await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
@@ -12,8 +11,11 @@ test('public_square', async ({ loginPage, publicSquarePage, env, capture }) => {
 
   await publicSquarePage.navigateToPublicSquare();
   await publicSquarePage.assertPublicFeedVisible();
+  await publicSquarePage.assertSidebarMenuVisible();
+  await publicSquarePage.assertActiveLinkIsVisible();
   await publicSquarePage.scrollDown();
   await publicSquarePage.assertScrollToTopVisible();
+  await publicSquarePage.assertCompanyName('ONEG8');
 
   await capture(publicSquarePage.page, 'public-square');
 });
@@ -25,4 +27,16 @@ test('reels', async ({ loginPage, reelsPage, env, capture }) => {
   await reelsPage.assertReelsFeedVisible();
 
   await capture(reelsPage.page, 'reels');
+});
+
+test('messages', async ({ loginPage, messagesPage, env, capture }) => {
+  await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+
+  await messagesPage.navigateToMessages();
+  await messagesPage.assertMessagesContainerVisible();
+  await messagesPage.assertSidebarMenuVisible();
+  await messagesPage.assertActiveLinkIsMessages();
+  await messagesPage.assertCompanyName('ONEG8');
+
+  await capture(messagesPage.page, 'messages');
 });
