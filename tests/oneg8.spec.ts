@@ -160,3 +160,18 @@ test.describe('Search Sidebar Page', () => {
     await searchSidebarPage.assertNoSearchMsg();
   });
 });
+
+test.describe('Notification Sidebar', () => {
+  test.beforeEach(async ({ loginPage, notificationSidebarPage, env }) => {
+    await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+    await notificationSidebarPage.navigateToNotification();
+  });
+
+  test('should display the heading as Notifications', async ({ notificationSidebarPage }) => {
+    await notificationSidebarPage.assertHeadingNotification();
+  });
+
+  test('should display the Clear All button', async({ notificationSidebarPage }) => {
+    await notificationSidebarPage.assertClearAllButton();
+  });
+});

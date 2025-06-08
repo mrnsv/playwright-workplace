@@ -6,6 +6,7 @@ import { MessagesPage } from '../pages/MessagesPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { SettingsPage } from '../pages/SettingsPage';
 import { SearchSidebarPage } from '../pages/SearchSidebarPage';
+import { NotificationSidebarPage } from '../pages/NotificationSidebarPage';
 import { ENV } from '../env';
 import { captureScreenshot } from '../utils/screenshotHelper';
 
@@ -17,6 +18,7 @@ type CustomFixtures = {
   profilePage: ProfilePage;
   settingsPage: SettingsPage;
   searchSidebarPage: SearchSidebarPage;
+  notificationSidebarPage: NotificationSidebarPage;
   env: typeof ENV;
   capture: (page: Page, name: string) => Promise<void>;
 };
@@ -42,6 +44,9 @@ export const test = base.extend<CustomFixtures>({
   },
   searchSidebarPage: async ({ page }, use) => {
     await use(new SearchSidebarPage(page));
+  },
+  notificationSidebarPage: async ({ page }, use) => {
+    await use(new NotificationSidebarPage(page));
   },
   env: async ({}, use) => {
     await use(ENV);
