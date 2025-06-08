@@ -31,7 +31,6 @@ export class PublicSquarePage {
   async navigateToPublicSquare() {
     await this.publicSquareButton.waitFor({ state: 'visible' });
     // await this.publicSquareButton.click();
-    await this.page.waitForLoadState('networkidle');
   }
 
   async assertPublicFeedVisible() {
@@ -39,6 +38,7 @@ export class PublicSquarePage {
   }
 
   async scrollDown(pixels = 1000) {
+    await this.page.waitForLoadState('networkidle');
     await this.page.mouse.wheel(0, pixels);
   }
 
