@@ -1,3 +1,4 @@
+import { SearchSidebarPage } from '../pages/SearchSidebarPage';
 import { test, expect  } from './fixtures';
 
 test('login', async ({ loginPage, env, capture, page }) => {
@@ -134,5 +135,28 @@ test.describe('Settings Page', () => {
     expect(json).toHaveProperty('Status', 1);
 
     await expect(page).toHaveURL(/login/i);
+  });
+});
+
+test.describe('Search Sidebar Page', () => {
+  test.beforeEach(async ({ loginPage, searchSidebarPage, env }) => {
+    await loginPage.login(env.USER_EMAIL_001, env.USER_PASSWORD);
+    await searchSidebarPage.navigateToSearch();
+  });
+
+  test('should display the heading as Search', async ({ searchSidebarPage }) => {
+    await searchSidebarPage.assertHeadingSearch();
+  });
+
+  test('should display search input box', async ({ searchSidebarPage }) => {
+    await searchSidebarPage.assertsearchInputBox();
+  });
+
+  test('should display three tabs for searching', async ({ searchSidebarPage }) => {
+    await searchSidebarPage.assertThreeTabs();
+  });
+
+  test('should display no search message', async ({ searchSidebarPage }) => {
+    await searchSidebarPage.assertNoSearchMsg();
   });
 });
